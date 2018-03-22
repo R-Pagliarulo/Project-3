@@ -51,39 +51,39 @@ public class Car{
   
   //random path
   public String randomPath(){
-	  String p = "";
-	  Random r = new Random();
-	  while(p.length() < 4){
-		  int rp = r.nextInt(4);
-		  if(rp == 0 && !p.contains("A")){
-			  p += "A";
-		  }else if(rp == 1 && !p.contains("B")){
-			  p += "B";
-		  }else if(rp == 2 && !p.contains("C")){
-			  p += "C";
-		  }else if(rp == 3 && !p.contains("D")){
-			  p += "D";
-		  }else{
-			  
-		  }
-	  }
-	  return p;
+   String p = "";
+   Random r = new Random();
+   while(p.length() < 4){
+    int rp = r.nextInt(4);
+    if(rp == 0 && !p.contains("A")){
+     p += "A";
+    }else if(rp == 1 && !p.contains("B")){
+     p += "B";
+    }else if(rp == 2 && !p.contains("C")){
+     p += "C";
+    }else if(rp == 3 && !p.contains("D")){
+     p += "D";
+    }else{
+     
+    }
+   }
+   return p;
   }
   
   public char firstStop(){
-	  return path.charAt(0);
+   return path.charAt(0);
   }
   public char secondStop(){
-	  return path.charAt(1);
+   return path.charAt(1);
   }
   public char thirdStop(){
-	  return path.charAt(2);
+   return path.charAt(2);
   }
   public char fourthStop(){
-	  return path.charAt(3);
+   return path.charAt(3);
   }
   
   public String getPath(){
-	  return path;
+   return path;
   }
 }
