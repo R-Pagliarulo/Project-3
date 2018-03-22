@@ -16,6 +16,7 @@ public class Transition extends Application{
   @Override
   public void start(Stage primaryStage) {
     primaryStage.setTitle("Transition");
+    primaryStage.setResizable(false);
     primaryStage.setScene(makeGUI());
     primaryStage.show();
   }
@@ -55,32 +56,24 @@ public class Transition extends Application{
     TranslateTransition transitiona1 = new TranslateTransition();
     transitiona1.setDuration(Duration.seconds(6-car1.getSpeed()));
     transitiona1.setToX(500);
-    transitiona1.setAutoReverse(true);
-    transitiona1.setCycleCount(Animation.INDEFINITE);
     transitiona1.setNode(a);
     transitiona1.play();
     
     TranslateTransition transitiona2 = new TranslateTransition();
     transitiona2.setDuration(Duration.seconds(6-car2.getSpeed()));
     transitiona2.setToX(500);
-    transitiona2.setAutoReverse(true);
-    transitiona2.setCycleCount(Animation.INDEFINITE);
     transitiona2.setNode(b);
     transitiona2.play();
     
     TranslateTransition transitiona3 = new TranslateTransition();
     transitiona3.setDuration(Duration.seconds(6-car3.getSpeed()));
     transitiona3.setToX(500);
-    transitiona3.setAutoReverse(true);
-    transitiona3.setCycleCount(Animation.INDEFINITE);
     transitiona3.setNode(c);
     transitiona3.play();
     
     TranslateTransition transitiona4 = new TranslateTransition();
     transitiona4.setDuration(Duration.seconds(6-car4.getSpeed()));
     transitiona4.setToX(500);
-    transitiona4.setAutoReverse(true);
-    transitiona4.setCycleCount(Animation.INDEFINITE);
     transitiona4.setNode(d);
     transitiona4.play();
     
@@ -90,6 +83,12 @@ public class Transition extends Application{
     return scene;
   }
   public static void main(String[] args){
-    launch(args);
+    //launch(args);
+	  Car c = new Car("C1", "Blue");
+	  System.out.println(c.getPath());
+	  System.out.println(c.firstStop());
+	  System.out.println(c.secondStop());
+	  System.out.println(c.thirdStop());
+	  System.out.println(c.fourthStop());
   }
 }
