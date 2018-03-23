@@ -13,16 +13,35 @@ import java.util.Random;
 import javafx.scene.text.*;
 import javafx.animation.PathTransition.OrientationType;
 
+/**
+ * @author Paul MacAllister
+ * @author Nathan Staley
+ * @author Robert Pagliarulo
+ * @since 03-22-2018
+ * 
+ * Software Design
+ * Prof Moussavi
+ * Project 3
+ * 
+ * This class creates a GUI which has 2 shapes representing cars, 2 big grey squares representing the asphalt they're 
+ * driving on, locations in which they drive to(which are labeled by a letter and smaller and different colored square),
+ * a start button, and two reset buttons.
+ * 
+ * This class takes the two car shapes and has each of them "drive" to all four locations in a random order, at a random speed,
+ * the random order is labeled above each car, and the whole process is started by pressing the start button, and reset with
+ * the reset button.
+ * 
+ */
 
 public class MainGUI extends Application{
   
-  public int startEnable = 0;
+  public int startEnable = 0;//used to set when the start button will be enabled or not
   
   @Override
   public void start(Stage primaryStage) {
-    primaryStage.setTitle("Transition");
-    primaryStage.setResizable(false);
-    primaryStage.setScene(makeGUI());
+    primaryStage.setTitle("Transition");//title of program
+    primaryStage.setResizable(false);//making the program bigger makes it look goofy
+    primaryStage.setScene(makeGUI());//creates the scene
     primaryStage.show();
   }
     public static void main(String[] args){
@@ -37,11 +56,11 @@ public Scene makeGUI(){
     
     start.setOnAction(new EventHandler<ActionEvent>() {
     @Override public void handle(ActionEvent e) {
-      start.setDisable(true);
+      start.setDisable(true);//diables the button after it is clicked so it does not create multiple instances of the simulation
       startEnable = 0;
       for(int a=0;a<2;a++){
         
-        double checkx = 600*a;//used to make the second car appear in its square
+        double checkx = 600*a;//used help place where the buttons and cars will be in the GUI
       
         Car carAI = new Car("car","RED");//creates car to use the random speed and random path methods
       
@@ -86,27 +105,29 @@ public Scene makeGUI(){
           }
         }
         
-      Text pathlabel = new Text("Car 1 Path: " + carAI.getPath());
-      pathlabel.setX(10+checkx);
-      pathlabel.setY(100);
-      
-      Button reset = new Button("");
-      if(a==0)
-        reset.setText("Reset Simulation: Car1");
-      else
-        reset.setText("Reset Simulation: Car2");
-      reset.setOnAction(new EventHandler<ActionEvent>(){
-      @Override public void handle(ActionEvent e){
-        startEnable += 1;
-        if(startEnable == 2)
-          start.setDisable(false);
-        root.getChildren().remove(car);
-        root.getChildren().remove(reset);
-        root.getChildren().remove(pathlabel);
-      }
-    });
-      
-      reset.setLayoutX(10+checkx);
+        
+        
+        Text pathlabel = new Text("Car 1 Path: " + carAI.getPath());//creates a label that shows the path for each car, and puts it above each car
+        pathlabel.setX(10+checkx);//places where the label(s) will be
+        pathlabel.setY(100);
+        
+        Button reset = new Button("");//names the button based on which car is being created
+        if(a==0)
+          reset.setText("Reset Simulation: Car1");
+        else
+          reset.setText("Reset Simulation: Car2");
+        reset.setOnAction(new EventHandler<ActionEvent>(){
+          @Override public void handle(ActionEvent e){
+            startEnable += 1;//when a reset button is pressed, it uses this to make sure that the start button is enabled only after
+            if(startEnable == 2)//both reset buttons have been pressed
+              start.setDisable(false);
+          root.getChildren().remove(car);//removed the car, reset button, and pathlabel after the reset button is pressed 
+          root.getChildren().remove(reset);
+          root.getChildren().remove(pathlabel);
+        }
+      });
+        
+      reset.setLayoutX(10+checkx);//places where the reset button will be (+600x for the second)
       reset.setLayoutY(30);
       Path path = new Path();//Path object to put in the PathTransition object
       
@@ -119,6 +140,7 @@ public Scene makeGUI(){
       movements.setNode(car);//sets the car as the object that will be moving
       movements.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);//makes the cars face the way they are moving
       movements.play();//runs the movement
+      
       
       root.getChildren().addAll(reset,car,pathlabel);//adds the nodes into the Pane
      }
@@ -181,22 +203,22 @@ public Scene makeGUI(){
       
       Text ta = new Text();
       ta.setText("A");//Creates the A text
-      ta.setX(100+checkx);
+      ta.setX(100+checkx);//places the A text at location A
       ta.setY(200);
      
       Text tb = new Text();
       tb.setText("B");//creates the B text
-      tb.setX(200+checkx);
+      tb.setX(200+checkx);//places the B text at location B
       tb.setY(470);
       
       Text tc = new Text();
       tc.setText("C");//creates the C text
-      tc.setX(300+checkx);
+      tc.setX(300+checkx);//places the C text at location C
       tc.setY(300);
    
       Text td = new Text();
       td.setText("D");//creates the D text
-      td.setX(500+checkx);
+      td.setX(500+checkx);//places the D text at location D
       td.setY(400);
       
       root.getChildren().addAll(loca,locb,locc,locd,ta,tb,tc,td);//adds the texts into the Pane, this is done after the roads are added so they are visible

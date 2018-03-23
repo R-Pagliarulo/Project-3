@@ -49,10 +49,10 @@ public class Car{
     return speed;
   }
   public long getStartTime(){
-	  return startTime;
+   return startTime;
   }
   public long getEndTime() {
-	  return endTime;
+   return endTime;
   }
   
   
@@ -66,15 +66,15 @@ public class Car{
     speed = a;
   }
   public void setStartTime(long time){
-	  startTime = time;
+   startTime = time;
   }
   public void setEndTime(long time){
-	  endTime = time;
+   endTime = time;
   }
   
   
   public long getRaceTime() {
-	  return ((endTime - startTime) / 1000);
+   return ((endTime - startTime) / 1000);
   }
   
   
