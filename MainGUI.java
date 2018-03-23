@@ -1,18 +1,3 @@
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.scene.shape.*;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
-import javafx.animation.PathTransition;
-import java.util.Random;
-import javafx.scene.text.*;
-import javafx.animation.PathTransition.OrientationType;
-
 /**
  * @author Paul MacAllister
  * @author Nathan Staley
@@ -32,6 +17,20 @@ import javafx.animation.PathTransition.OrientationType;
  * the reset button.
  * 
  */
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.scene.shape.*;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+import javafx.animation.PathTransition;
+import java.util.Random;
+import javafx.scene.text.*;
+import javafx.animation.PathTransition.OrientationType;
 
 public class MainGUI extends Application{
   
