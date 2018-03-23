@@ -16,6 +16,8 @@ import javafx.animation.PathTransition.OrientationType;
 
 public class MainGUI extends Application{
   
+  public int startEnable = 0;
+  
   @Override
   public void start(Stage primaryStage) {
     primaryStage.setTitle("Transition");
@@ -36,6 +38,7 @@ public Scene makeGUI(){
     start.setOnAction(new EventHandler<ActionEvent>() {
     @Override public void handle(ActionEvent e) {
       start.setDisable(true);
+      startEnable = 0;
       for(int a=0;a<2;a++){
         
         double checkx = 600*a;//used to make the second car appear in its square
@@ -82,6 +85,11 @@ public Scene makeGUI(){
             locArray[c].setY(400);
           }
         }
+        
+      Text pathlabel = new Text("Car 1 Path: " + carAI.getPath());
+      pathlabel.setX(10+checkx);
+      pathlabel.setY(100);
+      
       Button reset = new Button("");
       if(a==0)
         reset.setText("Reset Simulation: Car1");
@@ -89,11 +97,17 @@ public Scene makeGUI(){
         reset.setText("Reset Simulation: Car2");
       reset.setOnAction(new EventHandler<ActionEvent>(){
       @Override public void handle(ActionEvent e){
-        start.setDisable(false);
+        startEnable += 1;
+        if(startEnable == 2)
+          start.setDisable(false);
         root.getChildren().remove(car);
+        root.getChildren().remove(reset);
+        root.getChildren().remove(pathlabel);
       }
     });
-
+      
+      reset.setLayoutX(10+checkx);
+      reset.setLayoutY(30);
       Path path = new Path();//Path object to put in the PathTransition object
       
       MoveTo moveTo = new MoveTo(50.0+checkx, 150.0);//sets where the cars will start
@@ -106,37 +120,64 @@ public Scene makeGUI(){
       movements.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);//makes the cars face the way they are moving
       movements.play();//runs the movement
       
-      reset.setLayoutX(100+checkx);
-      
-      root.getChildren().addAll(reset,car);//adds the nodes into the Pane
+      root.getChildren().addAll(reset,car,pathlabel);//adds the nodes into the Pane
      }
        
     }
 });
-      
-    Rectangle road = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
-    road.setX(10);//first rectangle set to be 10 to the right from the left side of the window
-    road.setY(110);
-    road.setWidth(550);
-    road.setHeight(600);
-    road.setArcWidth(20);
-    road.setArcHeight(20);
-    road.setFill(Color.GREY);
     
-    Rectangle road2 = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
-    road2.setX(600);//second rectangle is shifted to start 600 over to the right
-    road2.setY(110);
-    road2.setWidth(550);
-    road2.setHeight(600);
-    road2.setArcWidth(20);
-    road2.setArcHeight(20);
-    road2.setFill(Color.GREY);
-      
-    root.getChildren().addAll(road2,road,start);//adds the 2 "roads" and start button into the Pane object root
+    for(int a=0;a<2;a++){
+      int checkx = 590*a;
+      Rectangle road = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+      road.setX(10+checkx);//first rectangle set to be 10 to the right from the left side of the window
+      road.setY(110);
+      road.setWidth(550);
+      road.setHeight(500);
+      road.setArcWidth(20);
+      road.setArcHeight(20);
+      road.setFill(Color.GREY);
+      root.getChildren().add(road);//adds the 2 "roads"
+    }
     
-    for(int a=0;a<2;a++){//for loop that creates the two sets of letters to label the locations
+    for(int a=0;a<2;a++){//for loop that creates the two sets of letters for the locations, and the locations themselves
       
       int checkx = 600*a;//used to put the second set of letters 600 to the right of the first letters
+      
+      Rectangle loca = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+      loca.setX(80+checkx);//first rectangle set to be 10 to the right from the left side of the window
+      loca.setY(170);
+      loca.setWidth(50);
+      loca.setHeight(50);
+      loca.setArcWidth(20);
+      loca.setArcHeight(20);
+      loca.setFill(Color.ORANGE);
+      
+      Rectangle locb = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+      locb.setX(180+checkx);//first rectangle set to be 10 to the right from the left side of the window
+      locb.setY(440);
+      locb.setWidth(50);
+      locb.setHeight(50);
+      locb.setArcWidth(20);
+      locb.setArcHeight(20);
+      locb.setFill(Color.ORANGE);
+      
+      Rectangle locc = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+      locc.setX(280+checkx);//first rectangle set to be 10 to the right from the left side of the window
+      locc.setY(270);
+      locc.setWidth(50);
+      locc.setHeight(50);
+      locc.setArcWidth(20);
+      locc.setArcHeight(20);
+      locc.setFill(Color.ORANGE);
+      
+      Rectangle locd = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+      locd.setX(480+checkx);//first rectangle set to be 10 to the right from the left side of the window
+      locd.setY(370);
+      locd.setWidth(50);
+      locd.setHeight(50);
+      locd.setArcWidth(20);
+      locd.setArcHeight(20);
+      locd.setFill(Color.ORANGE);
       
       Text ta = new Text();
       ta.setText("A");//Creates the A text
@@ -158,10 +199,12 @@ public Scene makeGUI(){
       td.setX(500+checkx);
       td.setY(400);
       
-      root.getChildren().addAll(ta,tb,tc,td);//adds the texts into the Pane, this is done after the roads are added so they are visible
+      root.getChildren().addAll(loca,locb,locc,locd,ta,tb,tc,td);//adds the texts into the Pane, this is done after the roads are added so they are visible
     }
     
-    Scene scene = new Scene(root, 1200, 800);//creates the scene that will be returned to the start method
+    root.getChildren().add(start);
+    
+    Scene scene = new Scene(root, 1150, 650);//creates the scene that will be returned to the start method
     return scene;
   }
 }
