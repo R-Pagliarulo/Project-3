@@ -8,9 +8,11 @@ import javafx.stage.Stage;
 import javafx.scene.shape.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import javafx.animation.*;
+import javafx.animation.PathTransition;
 import java.util.Random;
 import javafx.scene.text.*;
+import javafx.animation.PathTransition.OrientationType;
+
 
 public class MainGUI extends Application{
   
@@ -26,124 +28,139 @@ public class MainGUI extends Application{
   }
 
 public Scene makeGUI(){
-    
+  
     Pane root = new Pane();
+   
+    Button start = new Button("Start Simulation");//start simulation button brings the cars into the scene and beings their motions
     
-    for(int a=0;a<2;a++){
+    start.setOnAction(new EventHandler<ActionEvent>() {
+    @Override public void handle(ActionEvent e) {
+      start.setDisable(true);
+      for(int a=0;a<2;a++){
+        
+        double checkx = 600*a;//used to make the second car appear in its square
       
-      double b = 200*a;
+        Car carAI = new Car("car","RED");//creates car to use the random speed and random path methods
       
-      Car carAI = new Car("car","RED");//creates car to use the random speed and random path methods
-      
-      Polygon car = new Polygon();//creates the shapes that look like cars
-      car.getPoints().addAll(new Double[]{
-        50.0, 150.0+b,
-        100.0, 150.0+b,
-        120.0, 160.0+b,
-        120.0, 170.0+b,
-        100.0, 180.0+b,
-        50.0, 180.0+b,
-        50.0, 150.0+b,
+        Polygon car = new Polygon();//creates the shapes that look like cars
+        car.getPoints().addAll(new Double[]{
+          50.0, 150.0,
+          100.0, 150.0,
+          120.0, 160.0,
+          120.0, 170.0,
+          100.0, 180.0,
+          50.0, 180.0,
+          50.0, 150.0,
+      });
+        
+        if(a==0)
+          car.setFill(Color.RED);//makes the first 'car' red
+        if(a==1)
+          car.setFill(Color.BLUE);//makes the second 'car' blue
+
+        LineTo[] locArray = new LineTo[4];//creates array for the following for loop to use
+        for(int arry=0;arry<4;arry++){//fills array with LineTo objects for the for loop after this one
+          LineTo loc = new LineTo();
+          locArray[arry] = loc;
+        }
+        
+        for(int c=0; c<4; c++){//assigns where the Car will go based off the random path is generates, made with an array and for loop to cut down on code
+          if(carAI.getPath().charAt(c) == 'A'){//checks if the current path location is A
+            locArray[c].setX(100+checkx);
+            locArray[c].setY(200);
+          }
+          else if(carAI.getPath().charAt(c) == 'B'){//checks if the current path location is B
+            locArray[c].setX(200+checkx);
+            locArray[c].setY(470);
+          }
+          else if(carAI.getPath().charAt(c) == 'C'){//checks if the current path location is C
+            locArray[c].setX(300+checkx);
+            locArray[c].setY(300);
+          }
+          else if(carAI.getPath().charAt(c) == 'D'){//checks if the current path location is D
+            locArray[c].setX(500+checkx);
+            locArray[c].setY(400);
+          }
+        }
+      Button reset = new Button("");
+      if(a==0)
+        reset.setText("Reset Simulation: Car1");
+      else
+        reset.setText("Reset Simulation: Car2");
+      reset.setOnAction(new EventHandler<ActionEvent>(){
+      @Override public void handle(ActionEvent e){
+        start.setDisable(false);
+        root.getChildren().remove(car);
+      }
     });
-      car.setFill(Color.RED);//makes the 'cars' red
+
+      Path path = new Path();//Path object to put in the PathTransition object
       
-      Rectangle road = new Rectangle();//creates rectangle that looks like a road the cars are driving on
-      road.setX(30);
-      road.setY(110+b);
-      road.setWidth(1100);
-      road.setHeight(100);
-      road.setArcWidth(20);
-      road.setArcHeight(20);
-      road.setFill(Color.GREY);
+      MoveTo moveTo = new MoveTo(50.0+checkx, 150.0);//sets where the cars will start
+      
+      path.getElements().addAll(moveTo,locArray[0],locArray[1],locArray[2],locArray[3]);//adds the locations and begining location into the path
+      PathTransition movements = new PathTransition();//sets movement for car
+      movements.setDuration(Duration.seconds(30-carAI.getSpeed()));//duration for how long the transition will last
+      movements.setPath(path);
+      movements.setNode(car);//sets the car as the object that will be moving
+      movements.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);//makes the cars face the way they are moving
+      movements.play();//runs the movement
+      
+      reset.setLayoutX(100+checkx);
+      
+      root.getChildren().addAll(reset,car);//adds the nodes into the Pane
+     }
+       
+    }
+});
+      
+    Rectangle road = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+    road.setX(10);//first rectangle set to be 10 to the right from the left side of the window
+    road.setY(110);
+    road.setWidth(550);
+    road.setHeight(600);
+    road.setArcWidth(20);
+    road.setArcHeight(20);
+    road.setFill(Color.GREY);
+    
+    Rectangle road2 = new Rectangle();//creates RECTANGLE that looks like a road the cars are driving on
+    road2.setX(600);//second rectangle is shifted to start 600 over to the right
+    road2.setY(110);
+    road2.setWidth(550);
+    road2.setHeight(600);
+    road2.setArcWidth(20);
+    road2.setArcHeight(20);
+    road2.setFill(Color.GREY);
+      
+    root.getChildren().addAll(road2,road,start);//adds the 2 "roads" and start button into the Pane object root
+    
+    for(int a=0;a<2;a++){//for loop that creates the two sets of letters to label the locations
+      
+      int checkx = 600*a;//used to put the second set of letters 600 to the right of the first letters
       
       Text ta = new Text();
       ta.setText("A");//Creates the A text
-      if(carAI.firstStop() == 'A'){//checks if A should be at the first stop
-        ta.setX(250);
-        ta.setY(100+b);
-      }
-      else if(carAI.secondStop() == 'A'){//checks if A should be at the second stop
-        ta.setX(500);
-        ta.setY(100+b);
-      }
-      else if(carAI.thirdStop() == 'A'){//checks if A should be at the third stop
-        ta.setX(750);
-        ta.setY(100+b);
-      }
-      else if(carAI.fourthStop() == 'A'){//checks if A should be at the fourth stop
-        ta.setX(1000);
-        ta.setY(100+b);
-      }
-      
-      
+      ta.setX(100+checkx);
+      ta.setY(200);
+     
       Text tb = new Text();
-      tb.setText("B");
-      if(carAI.firstStop() == 'B'){//checks if B should be at the first stop
-        tb.setX(250);
-        tb.setY(100+b);
-      }
-      else if(carAI.secondStop() == 'B'){//checks if B should be at the second stop
-        tb.setX(500);
-        tb.setY(100+b);
-      }
-      else if(carAI.thirdStop() == 'B'){//checks if B should be at the third stop
-        tb.setX(750);
-        tb.setY(100+b);
-      }
-      else if(carAI.fourthStop() == 'B'){//checks if B should be at the fourth stop
-        tb.setX(1000);
-        tb.setY(100+b);
-      }
-      
+      tb.setText("B");//creates the B text
+      tb.setX(200+checkx);
+      tb.setY(470);
       
       Text tc = new Text();
-      tc.setText("C");
-      if(carAI.firstStop() == 'C'){//checks if C should be at the fourth stop
-        tc.setX(250);
-        tc.setY(100+b);
-      }
-      else if(carAI.secondStop() == 'C'){//checks if C should be at the fourth stop
-        tc.setX(500);
-        tc.setY(100+b);
-      }
-      else if(carAI.thirdStop() == 'C'){//checks if C should be at the fourth stop
-        tc.setX(750);
-        tc.setY(100+b);
-      }
-      else if(carAI.fourthStop() == 'C'){//checks if C should be at the fourth stop
-        tc.setX(1000);
-        tc.setY(100+b);
-      }
-      
-      
+      tc.setText("C");//creates the C text
+      tc.setX(300+checkx);
+      tc.setY(300);
+   
       Text td = new Text();
-      td.setText("D");
-      if(carAI.firstStop() == 'D'){//checks if D should be at the fourth stop
-        td.setX(250);
-        td.setY(100+b);
-      }
-      else if(carAI.secondStop() == 'D'){//checks if D should be at the fourth stop
-        td.setX(500);
-        td.setY(100+b);
-      }
-      else if(carAI.thirdStop() == 'D'){//checks if D should be at the fourth stop
-        td.setX(750);
-        td.setY(100+b);
-      }
-      else if(carAI.fourthStop() == 'D'){//checks if D should be at the fourth stop
-        td.setX(1000);
-        td.setY(100+b);
-      }
+      td.setText("D");//creates the D text
+      td.setX(500+checkx);
+      td.setY(400);
       
-      TranslateTransition transitiona1 = new TranslateTransition();//sets movement for car
-      transitiona1.setToX(1000);
-      transitiona1.setDuration(Duration.seconds(10-carAI.getSpeed()));
-      transitiona1.setNode(car);
-      transitiona1.play();
-        
-      
-      root.getChildren().addAll(road,car,ta,tb,tc,td);//adds the nodes into the Pane
-     }
+      root.getChildren().addAll(ta,tb,tc,td);//adds the texts into the Pane, this is done after the roads are added so they are visible
+    }
+    
     Scene scene = new Scene(root, 1200, 800);//creates the scene that will be returned to the start method
     return scene;
   }
